@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# Prompt the user for input file path
+input_file_path = input("Enter the path of the input .txt file: ")
+
+# Derive the output file path
+output_file_path_parts = input_file_path.rsplit(".", 1)
+output_file_path = f"{output_file_path_parts[0]} - Anki import_pipe.txt"
+
+# Read the input file
+with open(input_file_path, "r") as input_file:
+    input_lines = input_file.readlines()
+
+# Process the input lines to create flashcards
+flashcards = []
+current_front = None
+current_back = ""
+
+for line in input_lines:
+    stripped_line = line.strip()
+    if stripped_line and not stripped_line.startswith(("-", "+")):
+        if current_front is not None:
+            if current_back:
+                flashcards.append({"front": current_front, "back": current_back})
+            current_back = ""
+        current_front = stripped_line
+    elif stripped_line.startswith("-"):
+        current_back += stripped_line[1:].strip() + "<br>"
+    elif stripped_line.startswith("+"):
+        current_back = stripped_line[1:].strip() + "<br>" + current_back
+
+# Write flashcards to the output file
+with open(output_file_path, "w") as output_file:
+    for flashcard in flashcards:
+        output_file.write(f"{flashcard['front']} | {flashcard['back']}\n\n")
+
+print(f"Flashcards saved to {output_file_path}")
