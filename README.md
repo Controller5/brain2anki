@@ -12,7 +12,9 @@ or
 Copy to usr/local/bin and run chmod to make it executable. 
 
 $ ln brain2anki4 usr/local/bin
+<br>
 $ chmod -x brain2anki4 
+<br>
 $ brain2anki4
 
 Instructions: 
